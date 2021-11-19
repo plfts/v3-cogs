@@ -1,0 +1,14 @@
+{
+    "author": [
+        "plofts (plofts#7842)"
+    ],
+    "install_msg": "Thanks for adding my repository. If you encounter issues open issue on GitHub.",
+    "name": "plofts' cogs",
+    "short": "Small collection of cogs by plofts",
+    "description": "Collection of cogs made by plofts",
+    "tags": [
+        "entertainment",
+        "images",
+        "utils"
+    ]
+}
