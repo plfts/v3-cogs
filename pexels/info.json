@@ -1,0 +1,18 @@
+{
+	"author": [
+		"plofts"
+	],
+	"description": "Random curated image from Pexels.",
+    "install_msg": "Installed. Check the commands with [p]help Pexels.",
+    "min_python_version": [3, 9, 0],
+    "permissions" : [
+		"send_messages",
+        "send_embeds"
+	],
+	"short": "Random images from Pexels",
+	"tags": [
+        "entertainment"
+    ],
+	"type": "COG",
+	"end_user_data_statement": "This cog does not persistently store data or metadata about users."
+}
