@@ -11,7 +11,7 @@
 <p>A small collection of cogs for Red Discord Bot. Mostly for entertainment but maybe also for other fun things in future.</p>
 <br>
 
-<p>To my repository to your bot, make sure you first have Downloader cog loaded! To do this do:
+<p>To add my repository to your bot, make sure you first have Downloader cog loaded! To do this do:
 
 **NOTE:** Replace [p] with your own prefix!
 
