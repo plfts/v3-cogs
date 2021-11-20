@@ -71,7 +71,28 @@ class Pexels(commands.Cog):
     @commands.group()
     async def pexels(self, ctx):
         """Options for Pexels cog"""
-        
+
+    @pexels.command()
+    @commands.is_owner()
+    async def setup(self, ctx):
+        """How do I setup the cog? Check here."""
+        embed = discord.Embed(
+            title="How do I setup the cog?", color=(await ctx.embed_color())
+        )
+        embed.add_field(
+            name=f"1. Get an API key from https://www.pexels.com/api/",
+            value="then set it up using {ctx.clean_prefix}set api pexels authorization <key>",
+        )
+        embed.add_field(
+            name=f"2. Set the max GLOBAL number of images to fetch using {ctx.clean_prefix}pexels defnumber <number>",
+            value="this is the maximum number of images that will be fetched from the API. Default is 15.",
+        )
+        embed.add_field(
+            name=f"3. Set the max number of images to fetch per guild using {ctx.clean_prefix}pexels number <number>",
+            value="this is the maximum number of images that will be fetched from the API per guild. Default is same as global.",
+        )
+        await ctx.send(embed=embed)
+
     @pexels.command()
     @commands.guild_only()
     @commands.cooldown(1, 10, commands.BucketType.user)
