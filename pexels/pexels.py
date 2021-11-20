@@ -71,9 +71,7 @@ class Pexels(commands.Cog):
     @commands.group()
     async def pexels(self, ctx):
         """Options for Pexels cog"""
-        if ctx.invoked_subcommand is None:
-            await ctx.send_help()
-
+        
     @pexels.command()
     @commands.guild_only()
     @commands.cooldown(1, 10, commands.BucketType.user)
