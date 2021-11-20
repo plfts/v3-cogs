@@ -81,7 +81,7 @@ class Pexels(commands.Cog):
         )
         embed.add_field(
             name=f"1. Get an API key from https://www.pexels.com/api/",
-            value="then set it up using {ctx.clean_prefix}set api pexels authorization <key>",
+            value=f"Then set it up using {ctx.clean_prefix}set api pexels authorization <key>",
             inline=False,
         )
         embed.add_field(
