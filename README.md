@@ -29,9 +29,8 @@ To install the cog you need
 ```
 </p>
 
-<br>
 
-##### What's in here?
+#### What's in here?
 
 <table>
     <tr>
@@ -44,15 +43,13 @@ To install the cog you need
     </tr>
 </table>
 
-<br>
 
-##### HEEEELP! MY COG DOESN'T WORK!
+#### HEEEELP! MY COG DOESN'T WORK!
 
 <p>In case you have got any issues with my cog, open a issue here and we'll find a solution. BUT! Before you do that please check the setup guides I provided with each cog.</p>
 
-<br>
 
-##### Credits to those people/sites:
+#### Credits to those people/sites:
 
 <ul>
     <li><a href="https://discord.gg/red">Red Discord Bot Community Discord</a></li>
