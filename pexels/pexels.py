@@ -85,17 +85,14 @@ class Pexels(commands.Cog):
             inline=False,
         )
         embed.add_field(
-            name=f"2. Set the max GLOBAL number of images to fetch using {ctx.clean_prefix}pexels defnumber <number>",
-            value="this is the maximum number of images that will be fetched from the API. Default is 15.",
+            name=f"2. Set the max GLOBAL number of images to fetch",
+            value=f"This is the maximum number of images that will be fetched from the API. Default is 15. Do that with **{ctx.clean_prefix}pexels defnumber <number>**",
             inline=False,
         )
         embed.add_field(
-            name=f"3. Set the max number of images to fetch per guild using {ctx.clean_prefix}pexels number <number>",
-            value="this is the maximum number of images that will be fetched from the API per guild. Default is same as global.",
+            name=f"3. Set the max number of images to fetch per guild",
+            value=f"This is the maximum number of images that will be fetched from the API per guild. Default is same as global. Do that with **{ctx.clean_prefix}pexels number <number>**",
             inline=False,
-        )
-        embed.set_footer(
-            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url
         )
         await ctx.reply(mention_author=False, embed=embed)
 
