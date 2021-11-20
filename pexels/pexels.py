@@ -82,14 +82,17 @@ class Pexels(commands.Cog):
         embed.add_field(
             name=f"1. Get an API key from https://www.pexels.com/api/",
             value="then set it up using {ctx.clean_prefix}set api pexels authorization <key>",
+            inline=False,
         )
         embed.add_field(
             name=f"2. Set the max GLOBAL number of images to fetch using {ctx.clean_prefix}pexels defnumber <number>",
             value="this is the maximum number of images that will be fetched from the API. Default is 15.",
+            inline=False,
         )
         embed.add_field(
             name=f"3. Set the max number of images to fetch per guild using {ctx.clean_prefix}pexels number <number>",
             value="this is the maximum number of images that will be fetched from the API per guild. Default is same as global.",
+            inline=False,
         )
         await ctx.send(embed=embed)
 
