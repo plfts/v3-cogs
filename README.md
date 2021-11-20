@@ -1,6 +1,8 @@
 <h3 align="center">PLOFTS' V3 COGS </h3>
 <hr style="height:1px;">
 
+
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/plofts/v3-cogs/main.svg)](https://results.pre-commit.ci/latest/github/plofts/v3-cogs/main)
 [![Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Red](https://img.shields.io/badge/Red--DiscordBot-V3-red)](https://docs.discord.red/en/stable/)
 [![DPY](https://img.shields.io/badge/Discord.py-1.7.3-blue)](https://pypi.org/project/discord.py/)
