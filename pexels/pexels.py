@@ -94,7 +94,10 @@ class Pexels(commands.Cog):
             value="this is the maximum number of images that will be fetched from the API per guild. Default is same as global.",
             inline=False,
         )
-        await ctx.send(embed=embed)
+        embed.set_footer(
+            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url
+        )
+        await ctx.reply(mention_author=False, embed=embed)
 
     @pexels.command()
     @commands.guild_only()
@@ -116,7 +119,7 @@ class Pexels(commands.Cog):
         embed.set_footer(
             text=f"Photos provided by Pexels | Results per page {max_number}"
         )
-        await ctx.send(embed=embed)
+        await ctx.reply(mention_author=False, embed=embed)
 
     @commands.guildowner()
     @pexels.command()
