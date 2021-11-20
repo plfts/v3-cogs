@@ -38,10 +38,15 @@ class Pexels(commands.Cog):
     async def get(self, ctx):
         async with ctx.typing():
             if await self.pexelscheck():
-                if await self.config.custom("PexelsGuildGroup", ctx.guild.id).pgg() == []:
+                if (
+                    await self.config.custom("PexelsGuildGroup", ctx.guild.id).pgg()
+                    == []
+                ):
                     max_number = await self.config.pdg()
                 else:
-                    max_number = await self.config.custom("PexelsGuildGroup", ctx.guild.id).pgg()
+                    max_number = await self.config.custom(
+                        "PexelsGuildGroup", ctx.guild.id
+                    ).pgg()
                 randomness = random.randint(0, max_number - 1)
                 token = await ctx.bot.get_shared_api_tokens("pexels")
                 headers = {"Authorization": "{}".format(token["authorization"])}
@@ -63,41 +68,21 @@ class Pexels(commands.Cog):
                     "You need to get an API key from https://www.pexels.com/api/"
                 )
 
-    @commands.guildowner()
-    @commands.command()
-    async def psnumber(self, ctx, number: int):
-        """Set the number of photos to be fetched from Pexels"""
-        if not number:
-            return await ctx.send("Enter a number.")
-        if number < 15:
-            return await ctx.send("The minimum number is 15.")
-        if number > 80:
-            return await ctx.send("The maximum number is 80.")
-        await self.config.custom("PexelsGuildGroup", ctx.guild.id).pgg.set(number)
-        await ctx.tick()
-
-    @commands.is_owner()
-    @commands.command()
-    async def psdefnumber(self, ctx, number: int):
-        """Set the default number of photos to be fetched from Pexels"""
-        if not number:
-            return await ctx.send("Enter a number.")
-        if number < 15:
-            return await ctx.send("The minimum number is 15.")
-        if number > 80:
-            return await ctx.send("The maximum number is 80.")
-        await self.config.pdg.set(number)
-        await ctx.tick()
-
-    @commands.command(aliases=["randpic"])
+    @commands.group()
+    async def pexels(self, ctx):
+        """Options for Pexels cog"""
+        
+    @pexels.command()
     @commands.guild_only()
     @commands.cooldown(1, 10, commands.BucketType.user)
-    async def pexels(self, ctx):
+    async def curated(self, ctx):
         """Send you a random image from pexels.com"""
         if await self.config.custom("PexelsGuildGroup", ctx.guild.id).pgg() == []:
             max_number = await self.config.pdg()
         else:
-            max_number = await self.config.custom("PexelsGuildGroup", ctx.guild.id).pgg()
+            max_number = await self.config.custom(
+                "PexelsGuildGroup", ctx.guild.id
+            ).pgg()
         embed = discord.Embed(
             title="A random picture has appeared",
             color=(await ctx.embed_colour()),
@@ -108,3 +93,36 @@ class Pexels(commands.Cog):
             text=f"Photos provided by Pexels | Results per page {max_number}"
         )
         await ctx.send(embed=embed)
+
+    @commands.guildowner()
+    @pexels.command()
+    async def number(self, ctx, number: int):
+        """Set the number of photos to be fetched from Pexels"""
+        if not number:
+            return await ctx.send("Enter a number.")
+        if number < 15:
+            return await ctx.send("The minimum number is 15.")
+        if number > 80:
+            return await ctx.send("The maximum number is 80.")
+        await self.config.custom("PexelsGuildGroup", ctx.guild.id).pgg.set(number)
+        await ctx.tick()
+
+    @commands.guildowner()
+    @pexels.command()
+    async def reset(self, ctx):
+        """Resets the guild config of per page results."""
+        await self.config.custom("PexelsGuildGroup", ctx.guild.id).pgg.set([])
+        await ctx.tick()
+
+    @commands.is_owner()
+    @pexels.command()
+    async def defnumber(self, ctx, number: int):
+        """Set the default number of photos to be fetched from Pexels"""
+        if not number:
+            return await ctx.send("Enter a number.")
+        if number < 15:
+            return await ctx.send("The minimum number is 15.")
+        if number > 80:
+            return await ctx.send("The maximum number is 80.")
+        await self.config.pdg.set(number)
+        await ctx.tick()
