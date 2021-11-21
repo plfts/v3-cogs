@@ -8,11 +8,12 @@ class Pexels(commands.Cog):
     """Pexels Image API fetching cog"""
 
     __version__ = "1.0.0"
+    __author__ = "plofts"
 
     def format_help_for_context(self, ctx):
         """Thanks Sinbad."""
         pre_processed = super().format_help_for_context(ctx)
-        return f"{pre_processed}\nCog Version: {self.__version__}"
+        return f"{pre_processed}\nCog Version: {self.__version__}\nAuthor: {self.__author__}"
 
     def __init__(self, bot):
         self.bot = bot
