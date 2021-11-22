@@ -43,7 +43,7 @@ To install the cog you need
     </tr>
     <tr>
         <td>Pexels</td>
-        <td>Fetches images from Pexels API and displays them in embed. Currently only support random curated images.</td>
+        <td>Fetches images from Pexels API and displays them in embed. Collections and videos not available yet.</td>
     </tr>
 </table>
 
