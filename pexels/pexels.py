@@ -1,8 +1,8 @@
 import random
 import discord
-import requests
+import aiohttp
 from redbot.core import Config, commands
-
+from redbot.core.utils.menus import menu, DEFAULT_CONTROLS
 
 
 class Pexels(commands.Cog):
@@ -55,13 +55,13 @@ class Pexels(commands.Cog):
                         "PexelsGuildGroup", ctx.guild.id
                     ).pgg()
                 auth = await self.authorizepx(ctx)
-                r = requests.get(
-                    f"https://api.pexels.com/v1/photos/{id}?per_page={max_number}",
-                    headers=auth,
-                )
-                data = r.json()
-                url = data["src"]["large"]
-                return url
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        f"https://api.pexels.com/v1/photos/{id}?per_page={max_number}",
+                        headers=auth,
+                    ) as r:
+                        data = await r.json()
+                        return data["src"]["large"]
             else:
                 return await ctx.send(
                     "You need to get an API key from https://www.pexels.com/api/"
@@ -108,41 +108,54 @@ class Pexels(commands.Cog):
             ).pgg()
         randomness = random.randint(0, max_number - 1)
         auth = await self.authorizepx(ctx)
-        r = requests.get(
-            f"https://api.pexels.com/v1/curated?per_page={max_number}",
-            headers=auth,
-        )
-        data = r.json()
-        id = data["photos"][randomness]["id"]
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                f"https://api.pexels.com/v1/curated?per_page={max_number}",
+                headers=auth,
+            ) as r:
+                data = await r.json()
+                id = data["photos"][randomness]["id"]
         result = await self.get(ctx, id)
         embed = discord.Embed(
             title="A random picture has appeared",
             color=(await ctx.embed_colour()),
         )
         embed.set_image(url=result)
-        embed.set_footer(
-            text=f"Photos provided by Pexels | Results per page {max_number}"
-        )
+        embed.set_footer(text=f"Photos provided by Pexels | Randomness: {max_number}")
         await ctx.reply(mention_author=False, embed=embed)
 
     @pexels.command()
+    @commands.guild_only()
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def search(self, ctx, searchterm: str):
-        """Search for a picture on Pexels"""
+        """Search for a picture on Pexels. Limited to 10 due to 200 request limit on Pexels API."""
+        # Thank you Aikaterna for helping me with this
+        embed_list = []
         if await self.pexelscheck():
             auth = await self.authorizepx(ctx)
-            r = requests.get(
-                f"https://api.pexels.com/v1/search?query={searchterm}&per_page=2",
-                headers=auth,
-            )
-            data = r.json()
-            id = data["photos"][0]["id"]
-            result = await self.get(ctx, id)
-            await ctx.send(result)
+            async with aiohttp.ClientSession() as session:
+                async with session.get(
+                    f"https://api.pexels.com/v1/search?query={searchterm}&per_page=10",
+                    headers=auth,
+                ) as r:
+                    data = await r.json()
+            for item in data["photos"]:
+                id = item["id"]
+                result = await self.get(ctx, id)
+                embed = discord.Embed(
+                    title=f"Search results for {searchterm}",
+                    color=(await ctx.embed_colour()),
+                )
+                embed.set_image(url=result)
+                embed.set_footer(
+                    text=f"Photos provided by Pexels | Results per page: 10"
+                )
+                embed_list.append(embed)
         else:
             await ctx.send(
                 "You need to get an API key from https://www.pexels.com/api/"
             )
+        await menu(ctx, embed_list, DEFAULT_CONTROLS)
 
     @commands.guildowner()
     @pexels.command()
@@ -176,13 +189,3 @@ class Pexels(commands.Cog):
             return await ctx.send("The maximum number is 80.")
         await self.config.pdg.set(number)
         await ctx.tick()
-
-
-"""
-                r = requests.get(
-                    f"https://api.pexels.com/v1/curated?per_page={max_number}",
-                    headers=headers,
-                )
-                data = r.json()
-                id = data["photos"][randomness]["id"]
-"""
