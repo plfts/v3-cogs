@@ -4,7 +4,7 @@
 	],
 	"description": "Random curated image from Pexels.",
     "install_msg": "Installed. Load the cog and read the setup guid with [p]pexels setup.",
-    "min_python_version": [3, 9, 0],
+    "min_python_version": [3, 8, 0],
     "permissions" : [
 		"send_messages",
         "send_embeds"
