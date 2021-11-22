@@ -6,6 +6,7 @@
 [![Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Red](https://img.shields.io/badge/Red--DiscordBot-V3-red)](https://docs.discord.red/en/stable/)
 [![DPY](https://img.shields.io/badge/Discord.py-1.7.3-blue)](https://pypi.org/project/discord.py/)
+[![Python](https://img.shields.io/badge/python-3.8%20%7C%203.9-blue)](https://python.org/)
 [![Discord](https://discordapp.com/api/guilds/911922442409226260/widget.png?style=shield)](https://discord.gg/2GpWXAbYD2)
 
 
