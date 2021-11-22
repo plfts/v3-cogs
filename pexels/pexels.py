@@ -4,6 +4,7 @@ import requests
 from redbot.core import Config, commands
 
 
+
 class Pexels(commands.Cog):
     """Pexels Image API fetching cog"""
 
@@ -35,8 +36,13 @@ class Pexels(commands.Cog):
         token = await self.bot.get_shared_api_tokens("pexels")
         return bool(token.get("authorization"))
 
+    async def authorizepx(self, ctx):
+        token = await ctx.bot.get_shared_api_tokens("pexels")
+        headers = {"Authorization": "{}".format(token["authorization"])}
+        return headers
+
     @commands.Cog.listener()
-    async def get(self, ctx):
+    async def get(self, ctx, id: int):
         async with ctx.typing():
             if await self.pexelscheck():
                 if (
@@ -48,24 +54,16 @@ class Pexels(commands.Cog):
                     max_number = await self.config.custom(
                         "PexelsGuildGroup", ctx.guild.id
                     ).pgg()
-                randomness = random.randint(0, max_number - 1)
-                token = await ctx.bot.get_shared_api_tokens("pexels")
-                headers = {"Authorization": "{}".format(token["authorization"])}
-                r = requests.get(
-                    f"https://api.pexels.com/v1/curated?per_page={max_number}",
-                    headers=headers,
-                )
-                data = r.json()
-                id = data["photos"][randomness]["id"]
+                auth = await self.authorizepx(ctx)
                 r = requests.get(
                     f"https://api.pexels.com/v1/photos/{id}?per_page={max_number}",
-                    headers=headers,
+                    headers=auth,
                 )
                 data = r.json()
                 url = data["src"]["large"]
                 return url
             else:
-                await ctx.send(
+                return await ctx.send(
                     "You need to get an API key from https://www.pexels.com/api/"
                 )
 
@@ -108,16 +106,43 @@ class Pexels(commands.Cog):
             max_number = await self.config.custom(
                 "PexelsGuildGroup", ctx.guild.id
             ).pgg()
+        randomness = random.randint(0, max_number - 1)
+        auth = await self.authorizepx(ctx)
+        r = requests.get(
+            f"https://api.pexels.com/v1/curated?per_page={max_number}",
+            headers=auth,
+        )
+        data = r.json()
+        id = data["photos"][randomness]["id"]
+        result = await self.get(ctx, id)
         embed = discord.Embed(
             title="A random picture has appeared",
             color=(await ctx.embed_colour()),
         )
-        data = await self.get(ctx)
-        embed.set_image(url=data)
+        embed.set_image(url=result)
         embed.set_footer(
             text=f"Photos provided by Pexels | Results per page {max_number}"
         )
         await ctx.reply(mention_author=False, embed=embed)
+
+    @pexels.command()
+    @commands.cooldown(1, 10, commands.BucketType.user)
+    async def search(self, ctx, searchterm: str):
+        """Search for a picture on Pexels"""
+        if await self.pexelscheck():
+            auth = await self.authorizepx(ctx)
+            r = requests.get(
+                f"https://api.pexels.com/v1/search?query={searchterm}&per_page=2",
+                headers=auth,
+            )
+            data = r.json()
+            id = data["photos"][0]["id"]
+            result = await self.get(ctx, id)
+            await ctx.send(result)
+        else:
+            await ctx.send(
+                "You need to get an API key from https://www.pexels.com/api/"
+            )
 
     @commands.guildowner()
     @pexels.command()
@@ -151,3 +176,13 @@ class Pexels(commands.Cog):
             return await ctx.send("The maximum number is 80.")
         await self.config.pdg.set(number)
         await ctx.tick()
+
+
+"""
+                r = requests.get(
+                    f"https://api.pexels.com/v1/curated?per_page={max_number}",
+                    headers=headers,
+                )
+                data = r.json()
+                id = data["photos"][randomness]["id"]
+"""
